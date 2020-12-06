@@ -29,7 +29,7 @@ class Account
         return $this->name;
     }
     
-    public function addAccount(string $emil, string $firstname, string $surname, string $passwd): int
+    public function addAccount(string $email, string $firstname, string $surname, string $passwd): int
     {
         // TODO: Added new references to code
         global $pdo;
@@ -79,12 +79,15 @@ class Account
         return $valid;
     }
 
-    public function isEmailValid(string $name): bool
+    public function isEmailValid(string $email): bool
     {
         $valid = TRUE;
-        $len = mb_strlen($name);
-        
-        if (($len < 8) || ($len > 16)) { $valid = FALSE; }
+
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $valid = TRUE;
+          } else {
+            $valid = FALSE;
+          }
         
         return $valid;
     }
@@ -94,7 +97,7 @@ class Account
         $valid = TRUE;
         $len = mb_strlen($name);
         
-        if (($len < 8) || ($len > 16)) { $valid = FALSE; }
+        if (($len < 0) || ($len > 16)) { $valid = FALSE; }
         
         return $valid;
     }
@@ -104,7 +107,7 @@ class Account
         $valid = TRUE;
         $len = mb_strlen($name);
         
-        if (($len < 8) || ($len > 16)) { $valid = FALSE; }
+        if (($len < 0) || ($len > 16)) { $valid = FALSE; }
         
         return $valid;
     }
@@ -123,10 +126,10 @@ class Account
     {
         global $pdo;
         
-        if (!$this->isNameValid($name)) { throw new Exception('Invalid user name'); }
+        if (!$this->isEmailValid($name)) { throw new Exception('Invalid user name'); }
         
         $id = NULL;
-        $query = 'SELECT account_id FROM '.$this->configs['db_name'].'.accounts WHERE (account_name = :name)';
+        $query = 'SELECT account_id FROM '.$this->configs['db_name'].'.accounts WHERE (account_mail = :name)';
         $values = array(':name' => $name);
         
         try
@@ -170,9 +173,7 @@ class Account
         }
         catch (PDOException $e) { throw new Exception('Database query error'); }
     }
-    
 
-    
     public function deleteAccount(int $id)
     {
         global $pdo;
