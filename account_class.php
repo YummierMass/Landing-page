@@ -2,17 +2,16 @@
 
 class Account
 {
-	private $id;
-    private $name;
+    private $id;
+    private $email;
     private $firstname;
     private $surname;
-    private $email;
     private $authenticated;
 	
 	public function __construct()
 	{
 		$this->id = NULL;
-		$this->name = NULL;
+		$this->email = NULL;
         $this->authenticated = FALSE;
         $this->configs = include('config.php');
 	}
@@ -24,9 +23,9 @@ class Account
         return $this->id;
     }
 
-    public function getName() 
+    public function getEmail() 
     {
-        return $this->name;
+        return $this->email;
     }
     
     public function addAccount(string $email, string $firstname, string $surname, string $passwd): int
@@ -66,16 +65,6 @@ class Account
 
         if (($id < 1) || ($id > 1000000)) { $valid = FALSE; }
 
-        return $valid;
-    }
-
-    public function isNameValid(string $name): bool
-    {
-        $valid = TRUE;
-        $len = mb_strlen($name);
-        
-        if (($len < 8) || ($len > 16)) { $valid = FALSE; }
-        
         return $valid;
     }
 
@@ -148,6 +137,7 @@ class Account
 
     public function editAccount(int $id, string $name, string $passwd, bool $enabled)
     {
+        // TODO: Edit to repair
         global $pdo;
 
         $name = trim($name);
@@ -201,18 +191,18 @@ class Account
         catch (PDOException $e) { throw new Exception('Database query error'); }
     }
     
-    public function login(string $name, string $passwd): bool
+    public function login(string $email, string $passwd): bool
     {
         global $pdo;
 
-        $name = trim($name);
+        $email = trim($email);
         $passwd = trim($passwd);
 
-        if(!$this->isNameValid($name)) { return FALSE; }
+        if(!$this->isEmailValid($email)) { return FALSE; }
         if(!$this->isPasswdValid($passwd)) { return FALSE; }
 
-        $query = 'SELECT * FROM '.$this->configs['db_name'].'.accounts WHERE (account_name = :name) AND (account_enabled = 1)';
-        $values = array(':name' => $name);
+        $query = 'SELECT * FROM '.$this->configs['db_name'].'.accounts WHERE (account_mail = :email) AND (account_enabled = 1)';
+        $values = array(':email' => $email);
 
         try
         {
@@ -228,7 +218,7 @@ class Account
             if(password_verify($passwd, $row['account_passwd']))
             {
                 $this->id = intval($row['accound_id'], 10);
-                $this->name = $name;
+                $this->email = $email;
                 $this->authenticated = TRUE;
                 $this->registerLoginSession();
                 return TRUE;
@@ -280,7 +270,7 @@ class Account
             if (is_array($row))
             {
                 $this->id = intval($row['account_id'], 10);
-                $this->name = $row['account_name'];
+                $this->email = $row['account_mail'];
                 $this->authenticated = TRUE;
                 
                 return TRUE;

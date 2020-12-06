@@ -14,7 +14,7 @@ $account = new Account();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title> maseczki profilowane jednokolorowe</title>
+    <title>Logowanie</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -86,7 +86,7 @@ $account = new Account();
 
                   try
                   {
-                    $login = $account->login($_POST["username"], $_POST["password"]);
+                    $login = $account->login($_POST["mail"], $_POST["password"]);
                   }
                   catch (Exception $e)
                   {
@@ -98,12 +98,10 @@ $account = new Account();
                   {
                     echo 'Authentication successful.<br>';
                     echo 'Account ID: ' . $account->getId() . '<br>';
-                    echo 'Account name: ' . $account->getName() . '<br>';
-                    echo ' <a href="index.html" > clik here </a> ';
+                    echo 'Account name: ' . $account->getEmail() . '<br>';
+                    $account->sessionLogin();
                     die();
                   }
-
-
 
                   else
                   {
