@@ -1,3 +1,34 @@
+<?php
+session_start();
+require './db_inc.php';
+require './account_class.php';
+$account = new Account();
+
+$login = FALSE;
+
+try
+{
+	$login = $account->sessionLogin();
+}
+catch (Exception $e)
+{
+	// echo $e;
+	die();
+}
+
+if (!$login)
+{
+  header("Location: logowanie.php");
+}
+else
+{
+  // echo 'Authentication successful.';
+	// echo 'Account ID: ' . $account->getId() . '<br>';
+	// echo 'Account name: ' . $account->getEmail() . '<br>';
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
 

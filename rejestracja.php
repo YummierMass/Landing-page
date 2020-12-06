@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="pl">
-
 <?php
+session_start();
 require './db_inc.php';
 require './account_class.php';
 $account = new Account();
 ?>
+<!DOCTYPE html>
+<html lang="pl">
 
 <head>
 
@@ -97,10 +97,6 @@ $account = new Account();
         <?php
         if(isset($_POST["send"]))
         {
-          echo $_POST["email"];
-          echo $_POST["firstname"];
-          echo $_POST["surname"];
-          echo $_POST["password"];
         try
         {
           $newId = $account->addAccount(

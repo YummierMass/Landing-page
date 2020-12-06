@@ -233,7 +233,7 @@ class Account
 
         if (session_status() == PHP_SESSION_ACTIVE)
         {
-            $query = 'REPLACE INTO '.$this->configs['db_name'].'.account_session (session_id, account_id, login_time) VALUES (:sid, :accountId, NOW())';
+            $query = 'REPLACE INTO '.$this->configs['db_name'].'.account_sessions (session_id, account_id, login_time) VALUES (:sid, :accountId, NOW())';
             $values = array(':sid' => session_id(), ':accountId' => $this->id);
 
             try
