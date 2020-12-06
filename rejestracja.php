@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="pl">
 
+<?php
+require './db_inc.php';
+require './account_class.php';
+$account = new Account();
+?>
+
 <head>
 
   <meta charset="utf-8">
@@ -91,6 +97,10 @@
         <?php
         if(isset($_POST["send"]))
         {
+          echo $_POST["email"];
+          echo $_POST["firstname"];
+          echo $_POST["surname"];
+          echo $_POST["password"];
         try
         {
           $newId = $account->addAccount(
