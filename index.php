@@ -4,29 +4,23 @@ require './db_inc.php';
 require './account_class.php';
 $account = new Account();
 
-$login = FALSE;
-
 try
 {
-	$login = $account->sessionLogin();
+  $login = $account->sessionLogin();
 }
 catch (Exception $e)
 {
-	// echo $e;
-	die();
+  die();
 }
 
-if (!$login)
+if(!$account->isAuthenticated())
 {
   header("Location: logowanie.php");
 }
 else
 {
-  // echo 'Authentication successful.';
-	// echo 'Account ID: ' . $account->getId() . '<br>';
-	// echo 'Account name: ' . $account->getEmail() . '<br>';
+  echo "Witaj: ".$account->getEmail();
 }
-
 ?>
 
 <!DOCTYPE html>

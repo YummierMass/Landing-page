@@ -217,7 +217,7 @@ class Account
         {
             if(password_verify($passwd, $row['account_passwd']))
             {
-                $this->id = intval($row['accound_id'], 10);
+                $this->id = intval($row['account_id'], 10);
                 $this->email = $email;
                 $this->authenticated = TRUE;
                 $this->registerLoginSession();
@@ -251,10 +251,8 @@ class Account
 
         if(session_status() == PHP_SESSION_ACTIVE)
         {
-            $query =
-            'SELECT * FROM '.$this->configs['db_name'].'.account_sessions, '.$this->configs['db_name'].'.accounts WHERE (account_sessions.session_id = :sid) ' . 
-		    'AND (account_sessions.login_time >= (NOW() - INTERVAL 7 DAY)) AND (account_sessions.account_id = accounts.account_id) ' . 
-            'AND (accounts.account_enabled = 1)';
+            
+            $query = 'SELECT * FROM '.$this->configs['db_name'].'.account_sessions, '.$this->configs['db_name'].'.accounts WHERE (account_sessions.session_id = :sid) ' .'AND (account_sessions.login_time >= (NOW() - INTERVAL 7 DAY)) AND (account_sessions.account_id = accounts.account_id) ' . 'AND (accounts.account_enabled = 1)';
             
             $values = array(':sid' => session_id());
 
@@ -264,11 +262,11 @@ class Account
                 $res->execute($values);
             }
             catch (PDOException $e) { throw new Exception('Database query error'); }
-
             $row = $res->fetch(PDO::FETCH_ASSOC);
 		
             if (is_array($row))
             {
+                
                 $this->id = intval($row['account_id'], 10);
                 $this->email = $row['account_mail'];
                 $this->authenticated = TRUE;

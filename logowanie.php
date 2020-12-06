@@ -1,5 +1,4 @@
 <?php
-// Always start this first
 session_start();
 require './db_inc.php';
 require './account_class.php';
@@ -21,9 +20,7 @@ if(isset($_POST["Submit1"]))
   
   if ($login)
   {
-    echo 'Authentication successful.<br>';
-    echo 'Account ID: ' . $account->getId() . '<br>';
-    echo 'Account name: ' . $account->getEmail() . '<br>';
+    header("Location: index.php");
     die();
   }
 
@@ -33,6 +30,8 @@ if(isset($_POST["Submit1"]))
   }
 
 }
+
+
 
 ?>
 
