@@ -29,28 +29,26 @@ class Account
         return $this->name;
     }
     
-    public function addAccount(string $name, string $firstname, string $surname, string $email, string $passwd): int
+    public function addAccount(string $emil, string $firstname, string $surname, string $passwd): int
     {
         // TODO: Added new references to code
         global $pdo;
         
-        $name = trim($name);
+        $email = trim($email);
         $firstname = trim($firstname);
         $surname = trim($surname);
-        $email = trim($email);
         $passwd = trim($passwd);
 
-        if (!$this->isNameValid($name)){ throw new Exception('Invalid user name'); }
-        if (!$this->isNameValid($firstname)){ throw new Exception('Invalid user firstname'); }
-        if (!$this->isNameValid($surname)){ throw new Exception('Invalid user surnname'); }
+        if (!$this->isEmailValid($email)){ throw new Exception('Invalid user email'); }
+        if (!$this->isFirstnameValid($firstname)){ throw new Exception('Invalid user firstname'); }
+        if (!$this->isSurnameValid($surname)){ throw new Exception('Invalid user surnname'); }
         if (!$this->isPasswdValid($passwd)){ throw new Exception('Invalid password'); }
-        if (!$this->isNameValid($email)){ throw new Exception('Invalid user name'); }
-        if (!is_null($this->getIdFromName($name))){ throw new Exception('User name not available'); }
+        if (!is_null($this->getIdFromName($email))){ throw new Exception('User not available'); }
 
-        $query = 'INSERT INTO '.$this->configs['db_name'].'.accounts (account_name, account_passwd) VALUES (:name, :passwd)';
+        $query = 'INSERT INTO '.$this->configs['db_name'].'.accounts (account_mail, account_passwd, account_firstname, account_surname) VALUES (:email, :passwd, :firstname, :surname)';
 
         $hash = password_hash($passwd, PASSWORD_DEFAULT);
-        $values = array(':name' => $name, ':passwd' => $hash);
+        $values = array(':email' => $email, ':passwd' => $hash, ':firstname' => $firstname, ':surname' => $surname);
         
         try
         {
@@ -62,8 +60,46 @@ class Account
         return $pdo->lastInsertId();
     }
    
-    
+    public function isIdValid(int $id): bool
+    {
+        $valid = TRUE;
+
+        if (($id < 1) || ($id > 1000000)) { $valid = FALSE; }
+
+        return $valid;
+    }
+
     public function isNameValid(string $name): bool
+    {
+        $valid = TRUE;
+        $len = mb_strlen($name);
+        
+        if (($len < 8) || ($len > 16)) { $valid = FALSE; }
+        
+        return $valid;
+    }
+
+    public function isEmailValid(string $name): bool
+    {
+        $valid = TRUE;
+        $len = mb_strlen($name);
+        
+        if (($len < 8) || ($len > 16)) { $valid = FALSE; }
+        
+        return $valid;
+    }
+
+    public function isFirstnameValid(string $name): bool
+    {
+        $valid = TRUE;
+        $len = mb_strlen($name);
+        
+        if (($len < 8) || ($len > 16)) { $valid = FALSE; }
+        
+        return $valid;
+    }
+
+    public function isSurnameValid(string $name): bool
     {
         $valid = TRUE;
         $len = mb_strlen($name);
@@ -135,14 +171,7 @@ class Account
         catch (PDOException $e) { throw new Exception('Database query error'); }
     }
     
-    public function isIdValid(int $id): bool
-    {
-        $valid = TRUE;
 
-        if (($id < 1) || ($id > 1000000)) { $valid = FALSE; }
-
-        return $valid;
-    }
     
     public function deleteAccount(int $id)
     {
