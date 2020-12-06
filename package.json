@@ -3,7 +3,8 @@
     "name": "startbootstrap-heroic-features",
     "version": "4.2.3",
     "scripts": {
-        "start": "node_modules/.bin/gulp watch"
+        "start": "node_modules/.bin/gulp watch",
+        "test": "test/test.js"
     },
     "description": "An HTML template with a hero heading and feature cards built with Bootstrap",
     "keywords": [
