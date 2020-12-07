@@ -1,11 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <?php
+session_start();
 require './db_inc.php';
 require './account_class.php';
 $account = new Account();
+
+if(isset($_POST["Submit1"]))
+{
+  $login = FALSE;
+
+  try
+  {
+    $login = $account->login($_POST["mail"], $_POST["password"]);
+  }
+  catch (Exception $e)
+  {
+    echo $e->getMessage();
+    die();
+  }
+  
+  if ($login)
+  {
+    header("Location: index.php");
+    die();
+  }
+
+  else
+  {
+    echo 'Authentication failed.';
+  }
+
+}
+
+
+
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
 
   <head>
 
@@ -14,7 +45,7 @@ $account = new Account();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title> maseczki profilowane jednokolorowe</title>
+    <title>Logowanie</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -65,7 +96,7 @@ $account = new Account();
             <div class="content">
               <h3 class="display-3 color:btn-lg">Logowanie</h3>
               <hr />
-              <form method="post">
+              <form method="post" action="logowanie.php">
                 <div class="form-group">
                   <label>Nazwa uzytkownika</label>
                   <input type="text" class="form-control" placeholder="e-mail" name="mail">
@@ -79,39 +110,6 @@ $account = new Account();
                 <button type="button" class="btn btn-link" onclick="location.href = 'rejestracja.php';" >Zarejestruj się!</button>
                 <button type="button" class="btn btn-link">Reset hasła</button>
                 <hr />
-                <?php
-                if(isset($_POST["Submit1"]))
-                {
-                  $login = FALSE;
-
-                  try
-                  {
-                    $login = $account->login($_POST["username"], $_POST["password"]);
-                  }
-                  catch (Exception $e)
-                  {
-                    echo $e->getMessage();
-                    die();
-                  }
-                  
-                  if ($login)
-                  {
-                    echo 'Authentication successful.<br>';
-                    echo 'Account ID: ' . $account->getId() . '<br>';
-                    echo 'Account name: ' . $account->getName() . '<br>';
-                    echo ' <a href="index.html" > clik here </a> ';
-                    die();
-                  }
-
-
-
-                  else
-                  {
-                    echo 'Authentication failed.';
-                  }
-                
-                }
-                ?>
               </form>
             </div>
           </div>
@@ -137,23 +135,3 @@ $account = new Account();
 
   </body>
 </html>
-
-            <!-- <form method="GET" action="logowanie.php">
-              <div class="form-group">
-                <label for="przykladowyEmail">Adres Email</label>
-                <input type="email" class="form-control" name="name" aria-describedby="podpowiedzEmail" placeholder="Wpisz Email">
-                <small id="podpowiedzEmail" class="form-text text-muted">W powyższym polu wpisujesz swój adres email.</small>
-              </div>
-              <div class="form-group">
-                <label for="przykladoweHaslo">Hasło</label>
-                <input type="password" class="form-control" id="przykladoweHaslo" placeholder="Wpisz hasło">
-              </div>
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="przykladowyCheckbox">
-                <label class="form-check-label" for="przykladowyCheckbox">Zaznacz mnie!</label>
-              </div>
-              <input type="submit" class="btn btn-primary" name="login" value="Submit">
-              <div class="display-3 text-center">
-                <a  href="rejestracja.html" class="btn btn-success btn-lg text-left">zarejestruj się!</a>
-              </div>
-            </form>  -->

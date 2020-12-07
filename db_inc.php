@@ -10,8 +10,8 @@ try
 }
 catch (PDOException $e)
 {
-   echo "<script>console.log('".'Database connection failed.\n'."');</script>";
+   // echo "<script>console.log('".'Database connection failed.\n'."');</script>";
    die();
 }
 
-echo "<script>console.log('"."Connected successfully"."');</script>";
+// echo "<script>console.log('"."Connected successfully"."');</script>";
